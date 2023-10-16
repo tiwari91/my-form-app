@@ -1,0 +1,34 @@
+.formContainer {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    width: fit-content;
+}
+
+.formElement {
+  margin-top: 20px;
+}
+
+.saveBtn{
+  margin-top: 20px;
+}
+
+.horizontalSpace {
+  margin-left: 10px; 
+}
+
+.errorMessage {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.errorMessage ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.errorMessage li {
+  margin: 5px 0;
+}
