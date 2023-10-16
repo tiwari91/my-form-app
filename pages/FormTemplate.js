@@ -2,19 +2,30 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styles from "../styles/FormTemplate.module.css";
+import { z } from "zod";
+
+const formSchema = z.object({
+  formName: z.string().min(1, "Form name cannot be empty"),
+});
 
 export default function FormTemplate() {
   const [formName, setFormName] = useState("");
   const [formElements, setFormElements] = useState([]);
-  const [fetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [formSaving, setFormSaving] = useState(false);
+  const [validationErrors, setValidationErrors] = useState([]);
+
   const router = useRouter();
 
   useEffect(() => {
-    if (loading) {
+    if (loading && !formSaving) {
       fetchLatestForm();
     }
-  }, [loading]);
+  }, [loading, formSaving]);
+
+  const handleFormNameChange = (e) => {
+    setFormName(e.target.value);
+  };
 
   const handleCheckboxChange = (e, index) => {
     const isChecked = e.target.checked;
@@ -50,10 +61,8 @@ export default function FormTemplate() {
         const { form } = await response.json();
         setFormName(form.formName);
         const existingForm = await checkFormExistence(form.formName);
-        console.log("existingForm", existingForm);
         if (existingForm) {
           setFormElements([...existingForm.formElements]);
-          setFetched(true);
           await saveMergedForm(form.formName, existingForm.formElements);
         } else {
           setFormElements([...form.formElements]);
@@ -64,7 +73,6 @@ export default function FormTemplate() {
     } catch (error) {
       console.error("Error:", error);
     } finally {
-      console.log("false");
       setLoading(false);
     }
   };
@@ -126,6 +134,7 @@ export default function FormTemplate() {
       });
 
       if (response.ok) {
+        setFormSaving(false);
         router.push("/Form");
       } else {
         console.error("Failed to save the form.");
@@ -136,6 +145,8 @@ export default function FormTemplate() {
       } else {
         console.error("Error:", error);
       }
+    } finally {
+      setFormSaving(true);
     }
   };
 
@@ -155,8 +166,18 @@ export default function FormTemplate() {
               type="text"
               placeholder="Enter the Form Name"
               value={formName}
+              onChange={handleFormNameChange}
             />
           </div>
+          {validationErrors.length > 0 && (
+            <div className={styles.errorMessage}>
+              <ul>
+                {validationErrors.map((error, index) => (
+                  <li key={index}>{error.message}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           {formElements.map((element, index) => (
             <div key={index}>
               {element.type === "dropdown" && (
