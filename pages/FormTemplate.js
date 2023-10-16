@@ -18,10 +18,55 @@ export default function FormTemplate() {
       if (response.ok) {
         const { form } = await response.json();
         setFormName(form.formName);
-        console.log("formElements", form.formElements);
-        setFormElements(form.formElements);
+
+        const existingForm = await checkFormExistence(form.formName);
+        if (existingForm) {
+          setFormElements([...existingForm.formElements]);
+          await saveMergedForm(form.formName, existingForm.formElements);
+        } else {
+          setFormElements([...form.formElements]);
+        }
       } else {
         console.error("Failed to fetch the latest form.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const checkFormExistence = async (formName) => {
+    try {
+      const response = await fetch(`/api/db/checkForm?formName=${formName}`);
+      if (response.ok) {
+        const { existingForm } = await response.json();
+        return existingForm;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error checking form existence:", error);
+      return null;
+    }
+  };
+
+  const saveMergedForm = async (formName, mergedFormElements) => {
+    try {
+      const formData = {
+        formName,
+        formElements: mergedFormElements,
+      };
+
+      const response = await fetch("/api/db/saveForm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log("Form saved successfully.");
+      } else {
+        console.error("Failed to save the form.");
       }
     } catch (error) {
       console.error("Error:", error);
