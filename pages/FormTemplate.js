@@ -60,12 +60,21 @@ export default function FormTemplate() {
       if (response.ok) {
         const { form } = await response.json();
         setFormName(form.formName);
-        const existingForm = await checkFormExistence(form.formName);
-        if (existingForm) {
-          setFormElements([...existingForm.formElements]);
-          await saveMergedForm(form.formName, existingForm.formElements);
-        } else {
-          setFormElements([...form.formElements]);
+        setFormElements(form.formElements);
+
+        const existingFormWithSameNameAndElements = await checkForExistingForm(
+          form.formName,
+          form.formElements
+        );
+
+        if (!existingFormWithSameNameAndElements) {
+          const existingForm = await checkForAutoFill(form.formName);
+          if (existingForm) {
+            setFormElements([...existingForm.formElements]);
+            await saveMergedForm(form.formName, existingForm.formElements);
+          } else {
+            setFormElements([...form.formElements]);
+          }
         }
       } else {
         console.error("Failed to fetch the latest form.");
@@ -77,7 +86,25 @@ export default function FormTemplate() {
     }
   };
 
-  const checkFormExistence = async (formName) => {
+  const checkForExistingForm = async (formName, formElements) => {
+    try {
+      const response = await fetch(
+        `/api/db/checkForExistingForm?formName=${formName}&formElements=${JSON.stringify(
+          formElements
+        )}`
+      );
+      if (response.ok) {
+        const { existingForm } = await response.json();
+        return existingForm;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error checking for existing form:", error);
+      return null;
+    }
+  };
+
+  const checkForAutoFill = async (formName) => {
     try {
       const response = await fetch(`/api/db/checkForm?formName=${formName}`);
       if (response.ok) {
@@ -124,6 +151,7 @@ export default function FormTemplate() {
 
     try {
       formSchema.parse(formData);
+      setFormSaving(true);
 
       const response = await fetch("/api/db/saveForm", {
         method: "POST",
@@ -134,8 +162,8 @@ export default function FormTemplate() {
       });
 
       if (response.ok) {
-        setFormSaving(false);
         router.push("/Form");
+        setFormSaving(false);
       } else {
         console.error("Failed to save the form.");
       }
