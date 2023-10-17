@@ -8,7 +8,7 @@
 
 .formElementContainer {
   border: 1px solid #ccc;
-  padding: revert-layer;
+  padding: 10px;
   margin: 10px;
   border-radius: 5px;
   width: fit-content;
