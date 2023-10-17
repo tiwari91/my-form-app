@@ -68,7 +68,6 @@ export default function Form() {
                     <input
                       type="text"
                       value={element.value}
-                      placeholder="Enter your text"
                       disabled={!element.editable}
                     />
                   </div>
@@ -82,7 +81,6 @@ export default function Form() {
                           <input
                             type="text"
                             value={option.label}
-                            placeholder="Enter your option"
                             disabled={!option.editable}
                           />
                         </div>

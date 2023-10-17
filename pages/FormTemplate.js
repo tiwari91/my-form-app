@@ -27,10 +27,10 @@ export default function FormTemplate() {
     setFormName(e.target.value);
   };
 
-  const handleCheckboxChange = (e, index) => {
+  const handleCheckboxChange = (e, index, optionIndex) => {
     const isChecked = e.target.checked;
     const updatedFormElements = [...formElements];
-    updatedFormElements[index].isChecked = isChecked;
+    updatedFormElements[index].options[optionIndex].isChecked = isChecked;
     setFormElements(updatedFormElements);
   };
 
@@ -41,9 +41,11 @@ export default function FormTemplate() {
     setFormElements(updatedFormElements);
   };
 
-  const handleRadioChange = (e, index, value) => {
+  const handleRadioChange = (e, index, optionIndex) => {
     const updatedFormElements = [...formElements];
-    updatedFormElements[index].selectedValue = value;
+    updatedFormElements[index].options.forEach((option, i) => {
+      option.isChecked = i === optionIndex;
+    });
     setFormElements(updatedFormElements);
   };
 
@@ -59,20 +61,22 @@ export default function FormTemplate() {
       const response = await fetch("/api/db/getLatestForm");
       if (response.ok) {
         const { form } = await response.json();
+        setFormName(form.formName);
+        setFormElements([...form.formElements]);
 
-        const existingForm = await checkForExistingForm(form.formName);
+        // const existingForm = await checkForExistingForm(form.formName);
 
-        if (!existingForm) {
-          setFormName(form.formName);
+        // if (!existingForm) {
+        //   setFormName(form.formName);
 
-          const existingForm = await checkForAutoFill(form.formName);
-          if (existingForm) {
-            setFormElements([...existingForm.formElements]);
-            await saveMergedForm(form.formName, existingForm.formElements);
-          } else {
-            setFormElements([...form.formElements]);
-          }
-        }
+        //   const existingForm = await checkForAutoFill(form.formName);
+        //   if (existingForm) {
+        //     setFormElements([...existingForm.formElements]);
+        //     await saveMergedForm(form.formName, existingForm.formElements);
+        //   } else {
+        //     setFormElements([...form.formElements]);
+        //   }
+        // }
       } else {
         console.error("Failed to fetch the latest form.");
       }
@@ -141,11 +145,14 @@ export default function FormTemplate() {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    e.preventDefault();
     const formData = {
       formName,
       formElements,
     };
+
+    console.log("formData", formData);
 
     try {
       formSchema.parse(formData);
@@ -185,7 +192,7 @@ export default function FormTemplate() {
       <h2>Form Template:</h2>
 
       <form>
-        <div>
+        <div className={styles.formContainer}>
           <div>
             <label htmlFor="formName">Form Name:</label>
             <input
@@ -207,35 +214,44 @@ export default function FormTemplate() {
           {formElements.map((element, index) => (
             <div key={index}>
               {element.type === "dropdown" && (
-                <div>
-                  <label htmlFor={`dropdownId-${index}`}>Dropdown Label</label>
+                <div className={styles.formElementContainer}>
+                  <div>{element.question}</div>
                   <select
                     id={`dropdownId-${index}`}
                     value={element.selectedValue}
                     onChange={(e) => handleDropdownChange(e, index)}
                   >
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                    {element.options.map((option, optionIndex) => (
+                      <option key={optionIndex} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
               )}
 
               {element.type === "checkbox" && (
-                <div>
-                  <label htmlFor={`checkboxId-${index}`}>Checkbox Label</label>
-                  <input
-                    type="checkbox"
-                    id={`checkboxId-${index}`}
-                    name={`checkboxName-${index}`}
-                    checked={element.isChecked}
-                    onChange={(e) => handleCheckboxChange(e, index)}
-                  />
+                <div className={styles.formElementContainer}>
+                  <div>{element.question}</div>
+                  {element.options.map((option, optionIndex) => (
+                    <div key={optionIndex}>
+                      <input
+                        type="checkbox"
+                        id={`checkboxId-${index}-${optionIndex}`}
+                        name={`checkboxName-${index}`}
+                        checked={option.isChecked}
+                        onChange={(e) =>
+                          handleCheckboxChange(e, index, optionIndex)
+                        }
+                      />
+                      {option.label}
+                    </div>
+                  ))}
                 </div>
               )}
               {element.type === "textbox" && (
-                <div>
-                  <label htmlFor={`textBoxId-${index}`}>Textbox Label</label>
+                <div className={styles.formElementContainer}>
+                  <div>{element.question}</div>
                   <input
                     type="text"
                     id={`textBoxId-${index}`}
@@ -246,29 +262,22 @@ export default function FormTemplate() {
                 </div>
               )}
               {element.type === "radiobutton" && (
-                <div>
-                  <input
-                    type="radio"
-                    id={`radioId1-${index}`}
-                    name={`radioGroup-${index}`}
-                    value="radioValue1"
-                    checked={element.selectedValue === "radioValue1"}
-                    onChange={(e) =>
-                      handleRadioChange(index, index, "radioValue1")
-                    }
-                  />
-                  <label htmlFor={`radioId1-${index}`}>Radio 1</label>
-                  <input
-                    type="radio"
-                    id={`radioId2-${index}`}
-                    name={`radioGroup-${index}`}
-                    value="radioValue2"
-                    checked={element.selectedValue === "radioValue2"}
-                    onChange={(e) =>
-                      handleRadioChange(index, index, "radioValue2")
-                    }
-                  />
-                  <label htmlFor={`radioId2-${index}`}>Radio 2</label>
+                <div className={styles.formElementContainer}>
+                  <div>{element.question}</div>
+                  {element.options.map((option, optionIndex) => (
+                    <div key={optionIndex}>
+                      <input
+                        type="radio"
+                        id={`radioId1-${index}`}
+                        name={`radioGroup-${index}`}
+                        checked={option.isChecked}
+                        onChange={(e) =>
+                          handleRadioChange(e, index, optionIndex)
+                        }
+                      />
+                      {option.label}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
