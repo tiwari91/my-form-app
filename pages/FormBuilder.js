@@ -19,52 +19,17 @@ export default function FormTemplate() {
     setSelectedElement(e.target.value);
   };
 
-  const handleCheckboxChange = (e, index) => {
-    const isChecked = e.target.checked;
-    const updatedFormElements = [...formElements];
-    updatedFormElements[index].isChecked = isChecked;
-    setFormElements(updatedFormElements);
-  };
-
-  const handleTextboxChange = (e, index) => {
-    const newValue = e.target.value;
-    const updatedFormElements = [...formElements];
-    updatedFormElements[index].value = newValue;
-    setFormElements(updatedFormElements);
-  };
-
-  const handleRadioChange = (e, index, value) => {
-    const updatedFormElements = [...formElements];
-    updatedFormElements[index].selectedValue = value;
-    setFormElements(updatedFormElements);
-  };
-
-  const handleDropdownChange = (e, index) => {
-    const selectedValue = e.target.value;
-    const updatedFormElements = [...formElements];
-    updatedFormElements[index].selectedValue = selectedValue;
-    setFormElements(updatedFormElements);
-  };
-
   const handleAddElement = () => {
     if (selectedElement) {
       let newElement = { type: selectedElement, value: "", options: [] };
 
-      if (selectedElement === "dropdown") {
-        // Handle dropdown selection
-        const dropdownElement = document.getElementById(
-          `dropdownId-${formElements.length}`
-        );
-        if (dropdownElement) {
-          newElement.value = dropdownElement.value;
-        }
-      } else if (
+      if (
         selectedElement === "checkbox" ||
-        selectedElement === "radiobutton"
+        selectedElement === "radiobutton" ||
+        selectedElement === "dropdown"
       ) {
         newElement.options.push({ label: "" });
       } else if (selectedElement === "textbox") {
-        // Handle text box input
         const textBoxElement = document.getElementById(
           `textBoxId-${formElements.length}`
         );
@@ -180,6 +145,36 @@ export default function FormTemplate() {
     }
   };
 
+  // dropdown
+  const handleDropDownLabelChange = (e, elementIndex, optionIndex) => {
+    const newLabel = e.target.value;
+    const updatedFormElements = [...formElements];
+    updatedFormElements[elementIndex].options[optionIndex].label = newLabel;
+    setFormElements(updatedFormElements);
+  };
+
+  const handleAddDropDownOption = (elementIndex, optionIndex) => {
+    const updatedFormElements = [...formElements];
+    const dropDownElement = updatedFormElements[elementIndex];
+
+    if (dropDownElement && dropDownElement.type === "dropdown") {
+      dropDownElement.options.splice(optionIndex + 1, 0, { label: "" });
+      setFormElements(updatedFormElements);
+    }
+  };
+
+  const handleRemoveDropDownOption = (elementIndex, optionIndex) => {
+    const updatedFormElements = [...formElements];
+    const dropDownElement = updatedFormElements[elementIndex];
+
+    if (dropDownElement && dropDownElement.type === "dropdown") {
+      if (dropDownElement.options.length > 1) {
+        dropDownElement.options.splice(optionIndex, 1);
+        setFormElements(updatedFormElements);
+      }
+    }
+  };
+
   return (
     <div>
       <div>
@@ -192,7 +187,7 @@ export default function FormTemplate() {
         <h3>Select an element from the dropdown to build the form </h3>
         <select value={selectedElement} onChange={handleElementChange}>
           <option value="">Select an HTML element</option>
-          {/* <option value="dropdown">Dropdown</option> */}
+          <option value="dropdown">Dropdown</option>
           <option value="checkbox">Checkbox</option>
           <option value="textbox">Text Input</option>
           <option value="radiobutton">Radio Button</option>
@@ -222,26 +217,52 @@ export default function FormTemplate() {
         )}
         {formElements.map((element, index) => (
           <div key={index} className={styles.formElement}>
-            {/* {element.type === "dropdown" && (
-              <div>
-                <input
-                  type="text"
-                  value={element.question}
-                  placeholder="Enter your question"
-                  onChange={(e) => handleLabelChange(e, index)}
-                />
-                <select
-                  className={styles.horizontalSpace}
-                  id={`dropdownId-${index}`}
-                  value={element.selectedValue}
-                  onChange={(e) => handleDropdownChange(e, index)}
-                >
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </select>
+            {element.type === "dropdown" && (
+              <div className={styles.formElementContainer}>
+                <div>
+                  <input
+                    type="text"
+                    value={element.question}
+                    placeholder="Enter your question"
+                    onChange={(e) => handleLabelChange(e, index)}
+                  />
+                </div>
+                <label>Add Drop DownOptions</label>
+                {element.options &&
+                  element.options.map((option, optionIndex) => (
+                    <div key={optionIndex}>
+                      <input
+                        type="text"
+                        value={option.label}
+                        placeholder="Enter your text"
+                        onChange={(e) =>
+                          handleDropDownLabelChange(e, index, optionIndex)
+                        }
+                      />
+                      <input
+                        type="dropdown"
+                        disabled={true}
+                        id={`dropdownOption-${index}-${optionIndex}`}
+                        name={`dropdownOption-${index}`}
+                      />
+                      <button
+                        onClick={() =>
+                          handleAddDropDownOption(index, optionIndex)
+                        }
+                      >
+                        +
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleRemoveDropDownOption(index, optionIndex)
+                        }
+                      >
+                        -
+                      </button>
+                    </div>
+                  ))}
               </div>
-            )} */}
+            )}
             {element.type === "checkbox" && (
               <div className={styles.formElementContainer}>
                 <div>
@@ -289,7 +310,7 @@ export default function FormTemplate() {
               </div>
             )}
             {element.type === "textbox" && (
-              <div>
+              <div className={styles.formElementContainer}>
                 <input
                   type="text"
                   value={element.question}
@@ -297,18 +318,10 @@ export default function FormTemplate() {
                   onChange={(e) => handleLabelChange(e, index)}
                 />
                 <label className={styles.horizontalSpace}>Text Input </label>
-
-                {/* <input
-                  type="text"
-                  id={`textBoxId-${index}`}
-                  name={`textBoxName-${index}`}
-                  value={element.value}
-                  onChange={(e) => handleTextboxChange(e, index)}
-                /> */}
               </div>
             )}
             {element.type === "radiobutton" && (
-              <div>
+              <div className={styles.formElementContainer}>
                 <div>
                   <input
                     type="text"
