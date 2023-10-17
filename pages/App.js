@@ -4,7 +4,7 @@ import Link from "next/link";
 import PublishedFormTemplates from "../components/PublishedFormTemplates";
 import PublishedFormBuilder from "../components/PublishedFormBuilder";
 
-export default function Form() {
+export default function App() {
   return (
     <>
       <div style={{ display: "flex" }}>

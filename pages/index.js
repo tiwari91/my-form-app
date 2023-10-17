@@ -1,6 +1,6 @@
 import React from "react";
 
-import Form from "./Form";
+import App from "./App";
 export default function Home() {
-  return <Form />;
+  return <App />;
 }
