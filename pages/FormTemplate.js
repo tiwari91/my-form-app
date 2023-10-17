@@ -152,13 +152,11 @@ export default function FormTemplate() {
       formElements,
     };
 
-    console.log("formData", formData);
-
     try {
       formSchema.parse(formData);
       setFormSaving(true);
 
-      const response = await fetch("/api/db/saveForm", {
+      const response = await fetch("/api/db/saveFormTemplate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
