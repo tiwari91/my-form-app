@@ -58,7 +58,10 @@ export default function FormTemplate() {
         if (dropdownElement) {
           newElement.value = dropdownElement.value;
         }
-      } else if (selectedElement === "checkbox") {
+      } else if (
+        selectedElement === "checkbox" ||
+        selectedElement === "radiobutton"
+      ) {
         newElement.options.push({ label: "" });
       } else if (selectedElement === "textbox") {
         // Handle text box input
@@ -68,22 +71,6 @@ export default function FormTemplate() {
         if (textBoxElement) {
           newElement.value = textBoxElement.value;
         }
-      } else if (selectedElement === "radiobutton") {
-        newElement.options.push({ label: "" });
-        // // Handle radio button selection
-        // const radioElement1 = document.getElementById(
-        //   `radioId1-${formElements.length}`
-        // );
-        // const radioElement2 = document.getElementById(
-        //   `radioId2-${formElements.length}`
-        // );
-
-        // if (radioElement1 && radioElement2) {
-        //   newElement.value = {
-        //     radio1: radioElement1.checked,
-        //     radio2: radioElement2.checked,
-        //   };
-        // }
       }
 
       setFormElements([...formElements, newElement]);
