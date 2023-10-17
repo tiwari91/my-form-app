@@ -62,6 +62,17 @@ export default function Form() {
             <p>Published: {formatDate(selectedForm.createdAt)}</p>
             {selectedForm.formElements.map((element, index) => (
               <div key={index}>
+                {element.type === "textbox" && (
+                  <div className={styles.formElementContainer}>
+                    <div>{element.question}</div>
+                    <input
+                      type="text"
+                      value={element.value}
+                      placeholder="Enter your text"
+                      disabled={!element.editable}
+                    />
+                  </div>
+                )}
                 {element.type === "dropdown" && (
                   <div className={styles.formElementContainer}>
                     <div>{element.question}</div>
@@ -72,11 +83,27 @@ export default function Form() {
                             type="text"
                             value={option.label}
                             placeholder="Enter your option"
-                            onChange={(e) =>
-                              handleDropDownLabelChange(e, index, optionIndex)
-                            }
                             disabled={!option.editable}
                           />
+                        </div>
+                      ))}
+                  </div>
+                )}
+                {(element.type === "checkbox" ||
+                  element.type === "radiobutton") && (
+                  <div className={styles.formElementContainer}>
+                    <div>{element.question}</div>
+                    {element.options &&
+                      element.options.map((option, optionIndex) => (
+                        <div key={optionIndex}>
+                          <input
+                            type={
+                              element.type === "checkbox" ? "checkbox" : "radio"
+                            }
+                            checked={option.selected}
+                            disabled={!option.editable}
+                          />
+                          {option.label}
                         </div>
                       ))}
                   </div>
