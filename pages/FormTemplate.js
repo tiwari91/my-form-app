@@ -211,6 +211,19 @@ export default function FormTemplate() {
           )}
           {formElements.map((element, index) => (
             <div key={index}>
+              {element.type === "textbox" && (
+                <div className={styles.formElementContainer}>
+                  <div>{element.question}</div>
+                  <input
+                    type="text"
+                    id={`textBoxId-${index}`}
+                    name={`textBoxName-${index}`}
+                    value={element.value}
+                    onChange={(e) => handleTextboxChange(e, index)}
+                  />
+                </div>
+              )}
+
               {element.type === "dropdown" && (
                 <div className={styles.formElementContainer}>
                   <div>{element.question}</div>
@@ -247,18 +260,7 @@ export default function FormTemplate() {
                   ))}
                 </div>
               )}
-              {element.type === "textbox" && (
-                <div className={styles.formElementContainer}>
-                  <div>{element.question}</div>
-                  <input
-                    type="text"
-                    id={`textBoxId-${index}`}
-                    name={`textBoxName-${index}`}
-                    value={element.value}
-                    onChange={(e) => handleTextboxChange(e, index)}
-                  />
-                </div>
-              )}
+
               {element.type === "radiobutton" && (
                 <div className={styles.formElementContainer}>
                   <div>{element.question}</div>
