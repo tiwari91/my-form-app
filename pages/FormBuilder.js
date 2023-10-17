@@ -69,20 +69,21 @@ export default function FormTemplate() {
           newElement.value = textBoxElement.value;
         }
       } else if (selectedElement === "radiobutton") {
-        // Handle radio button selection
-        const radioElement1 = document.getElementById(
-          `radioId1-${formElements.length}`
-        );
-        const radioElement2 = document.getElementById(
-          `radioId2-${formElements.length}`
-        );
+        newElement.options.push({ label: "" });
+        // // Handle radio button selection
+        // const radioElement1 = document.getElementById(
+        //   `radioId1-${formElements.length}`
+        // );
+        // const radioElement2 = document.getElementById(
+        //   `radioId2-${formElements.length}`
+        // );
 
-        if (radioElement1 && radioElement2) {
-          newElement.value = {
-            radio1: radioElement1.checked,
-            radio2: radioElement2.checked,
-          };
-        }
+        // if (radioElement1 && radioElement2) {
+        //   newElement.value = {
+        //     radio1: radioElement1.checked,
+        //     radio2: radioElement2.checked,
+        //   };
+        // }
       }
 
       setFormElements([...formElements, newElement]);
@@ -98,13 +99,6 @@ export default function FormTemplate() {
     const newQuestion = e.target.value;
     const updatedFormElements = [...formElements];
     updatedFormElements[index].question = newQuestion;
-    setFormElements(updatedFormElements);
-  };
-
-  const handleCheckboxLabelChange = (e, elementIndex, optionIndex) => {
-    const newLabel = e.target.value;
-    const updatedFormElements = [...formElements];
-    updatedFormElements[elementIndex].options[optionIndex].label = newLabel;
     setFormElements(updatedFormElements);
   };
 
@@ -139,6 +133,14 @@ export default function FormTemplate() {
     }
   };
 
+  // checkboxes
+  const handleCheckboxLabelChange = (e, elementIndex, optionIndex) => {
+    const newLabel = e.target.value;
+    const updatedFormElements = [...formElements];
+    updatedFormElements[elementIndex].options[optionIndex].label = newLabel;
+    setFormElements(updatedFormElements);
+  };
+
   const handleAddCheckboxOption = (elementIndex, optionIndex) => {
     const updatedFormElements = [...formElements];
     const checkboxElement = updatedFormElements[elementIndex];
@@ -161,6 +163,36 @@ export default function FormTemplate() {
     }
   };
 
+  // radio
+  const handleRadioLabelChange = (e, elementIndex, optionIndex) => {
+    const newLabel = e.target.value;
+    const updatedFormElements = [...formElements];
+    updatedFormElements[elementIndex].options[optionIndex].label = newLabel;
+    setFormElements(updatedFormElements);
+  };
+
+  const handleAddRadioOption = (elementIndex, optionIndex) => {
+    const updatedFormElements = [...formElements];
+    const radioElement = updatedFormElements[elementIndex];
+
+    if (radioElement && radioElement.type === "radiobutton") {
+      radioElement.options.splice(optionIndex + 1, 0, { label: "" });
+      setFormElements(updatedFormElements);
+    }
+  };
+
+  const handleRemoveRadioOption = (elementIndex, optionIndex) => {
+    const updatedFormElements = [...formElements];
+    const radioElement = updatedFormElements[elementIndex];
+
+    if (radioElement && radioElement.type === "radiobutton") {
+      if (radioElement.options.length > 1) {
+        radioElement.options.splice(optionIndex, 1);
+        setFormElements(updatedFormElements);
+      }
+    }
+  };
+
   return (
     <div>
       <div>
@@ -176,7 +208,7 @@ export default function FormTemplate() {
           {/* <option value="dropdown">Dropdown</option> */}
           <option value="checkbox">Checkbox</option>
           <option value="textbox">Text Input</option>
-          {/* <option value="radiobutton">Radio Button</option> */}
+          <option value="radiobutton">Radio Button</option>
         </select>
         <button className={styles.horizontalSpace} onClick={handleAddElement}>
           Add Element To The Form Below
@@ -288,29 +320,50 @@ export default function FormTemplate() {
                 /> */}
               </div>
             )}
-            {/* {element.type === "radiobutton" && (
+            {element.type === "radiobutton" && (
               <div>
-                <input
-                  type="radio"
-                  id={`radioId1-${index}`}
-                  name={`radioGroup-${index}`}
-                  value="radioValue1"
-                  checked={element.selectedValue === "radioValue1"}
-                  onChange={(e) => handleRadioChange(e, index, "radioValue1")}
-                />
-                <label htmlFor={`radioId1-${index}`}>Radio 1</label>
-
-                <input
-                  type="radio"
-                  id={`radioId2-${index}`}
-                  name={`radioGroup-${index}`}
-                  value="radioValue2"
-                  checked={element.selectedValue === "radioValue2"}
-                  onChange={(e) => handleRadioChange(e, index, "radioValue2")}
-                />
-                <label htmlFor={`radioId2-${index}`}>Radio 2</label>
+                <div>
+                  <input
+                    type="text"
+                    value={element.question}
+                    placeholder="Enter your question"
+                    onChange={(e) => handleLabelChange(e, index)}
+                  />
+                </div>
+                <label>Add Radio Options</label>
+                {element.options &&
+                  element.options.map((option, optionIndex) => (
+                    <div key={optionIndex}>
+                      <input
+                        type="text"
+                        value={option.label}
+                        placeholder="Enter your text"
+                        onChange={(e) =>
+                          handleRadioLabelChange(e, index, optionIndex)
+                        }
+                      />
+                      <input
+                        type="radio"
+                        disabled={true}
+                        id={`radioOption-${index}-${optionIndex}`}
+                        name={`radioOption-${index}`}
+                      />
+                      <button
+                        onClick={() => handleAddRadioOption(index, optionIndex)}
+                      >
+                        +
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleRemoveRadioOption(index, optionIndex)
+                        }
+                      >
+                        -
+                      </button>
+                    </div>
+                  ))}
               </div>
-            )} */}
+            )}
           </div>
         ))}
       </div>
