@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import styles from "../styles/FormTemplate.module.css";
+import { formatDate } from "../util/dateUtils";
 
 export default function Form() {
-  const [forms, setForm] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [forms, setForms] = useState([]);
+  const [selectedForm, setSelectedForm] = useState(null);
 
   useEffect(() => {
-    fetchForm();
+    fetchForms();
   }, []);
 
-  const fetchForm = async () => {
+  const fetchForms = async () => {
     try {
       const response = await fetch("/api/db/getForm");
       if (response.ok) {
         const data = await response.json();
-        setForm(data.forms);
+        setForms(data.forms);
       } else {
         console.error("Failed to fetch data.");
       }
@@ -23,8 +25,10 @@ export default function Form() {
     }
   };
 
-  const toggleUserData = (userId) => {
-    setSelectedUserId(userId === selectedUserId ? null : userId);
+  const handleFormChange = (event) => {
+    const selectedFormId = event.target.value;
+    const selectedForm = forms.find((form) => form.id === selectedFormId);
+    setSelectedForm(selectedForm);
   };
 
   return (
@@ -39,30 +43,49 @@ export default function Form() {
       </div>
 
       <div>
-        <h2>Forms: </h2>
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
+        <h2>Forms:</h2>
+        <select onChange={handleFormChange}>
+          <option value="">Select a Form</option>
           {forms.map((form) => (
-            <div
-              key={form.id}
-              style={{
-                margin: "10px",
-                padding: "10px",
-                border: "1px solid #ccc",
-              }}
-            >
-              <button onClick={() => toggleUserData(form.id)}>
-                {form.formName}
-              </button>
-              {selectedUserId === form.id && (
-                <div>
-                  <p>Form Name: {form.formName}</p>
-                  <p>Published: {form.createdAt}</p>
-                </div>
-              )}
-            </div>
+            <option key={form.id} value={form.id}>
+              {form.formName}
+            </option>
           ))}
-        </div>
+        </select>
       </div>
+
+      {selectedForm && (
+        <div>
+          <h2>Selected Form:</h2>
+          <div className={styles.formContainer}>
+            <p>Form Name: {selectedForm.formName}</p>
+            <p>Published: {formatDate(selectedForm.createdAt)}</p>
+            {selectedForm.formElements.map((element, index) => (
+              <div key={index}>
+                {element.type === "dropdown" && (
+                  <div className={styles.formElementContainer}>
+                    <div>{element.question}</div>
+                    {element.options &&
+                      element.options.map((option, optionIndex) => (
+                        <div key={optionIndex}>
+                          <input
+                            type="text"
+                            value={option.label}
+                            placeholder="Enter your option"
+                            onChange={(e) =>
+                              handleDropDownLabelChange(e, index, optionIndex)
+                            }
+                            disabled={!option.editable}
+                          />
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }

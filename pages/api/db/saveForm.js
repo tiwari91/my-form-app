@@ -4,9 +4,6 @@ const prisma = new PrismaClient();
 export default async function handler(req, res) {
   const { formName, formElements } = req.body;
 
-  console.log("formName", formName);
-  console.log("formElements", formElements);
-
   try {
     const form = await prisma.form.create({
       data: {
