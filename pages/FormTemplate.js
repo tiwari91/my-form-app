@@ -59,15 +59,12 @@ export default function FormTemplate() {
       const response = await fetch("/api/db/getLatestForm");
       if (response.ok) {
         const { form } = await response.json();
-        setFormName(form.formName);
-        setFormElements(form.formElements);
 
-        const existingFormWithSameNameAndElements = await checkForExistingForm(
-          form.formName,
-          form.formElements
-        );
+        const existingForm = await checkForExistingForm(form.formName);
 
-        if (!existingFormWithSameNameAndElements) {
+        if (!existingForm) {
+          setFormName(form.formName);
+
           const existingForm = await checkForAutoFill(form.formName);
           if (existingForm) {
             setFormElements([...existingForm.formElements]);
@@ -86,11 +83,11 @@ export default function FormTemplate() {
     }
   };
 
-  const checkForExistingForm = async (formName, formElements) => {
+  // to avoid saving duplicate
+  const checkForExistingForm = async (formName) => {
     try {
       const response = await fetch(
-        `/api/db/checkForExistingForm?formName=${formName}&formElements=${JSON.stringify(
-          formElements
+        `/api/db/checkForExistingForm?formName=${formName}
         )}`
       );
       if (response.ok) {
@@ -104,6 +101,7 @@ export default function FormTemplate() {
     }
   };
 
+  // autofills the form
   const checkForAutoFill = async (formName) => {
     try {
       const response = await fetch(`/api/db/checkForm?formName=${formName}`);

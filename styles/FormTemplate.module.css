@@ -6,6 +6,14 @@
     width: fit-content;
 }
 
+.formElementContainer {
+  border: 1px solid #ccc;
+  padding: revert-layer;
+  margin: 10px;
+  border-radius: 5px;
+  width: fit-content;
+}
+
 .formElement {
   margin-top: 20px;
 }

@@ -48,7 +48,7 @@ export default function FormTemplate() {
 
   const handleAddElement = () => {
     if (selectedElement) {
-      let newElement = { type: selectedElement, value: "" };
+      let newElement = { type: selectedElement, value: "", options: [] };
 
       if (selectedElement === "dropdown") {
         // Handle dropdown selection
@@ -59,13 +59,7 @@ export default function FormTemplate() {
           newElement.value = dropdownElement.value;
         }
       } else if (selectedElement === "checkbox") {
-        // Handle checkbox selection
-        const checkboxElement = document.getElementById(
-          `checkboxId-${formElements.length}`
-        );
-        if (checkboxElement) {
-          newElement.value = checkboxElement.checked;
-        }
+        newElement.options.push({ label: "" });
       } else if (selectedElement === "textbox") {
         // Handle text box input
         const textBoxElement = document.getElementById(
@@ -100,6 +94,20 @@ export default function FormTemplate() {
     setFormName(e.target.value);
   };
 
+  const handleLabelChange = (e, index) => {
+    const newQuestion = e.target.value;
+    const updatedFormElements = [...formElements];
+    updatedFormElements[index].question = newQuestion;
+    setFormElements(updatedFormElements);
+  };
+
+  const handleCheckboxLabelChange = (e, elementIndex, optionIndex) => {
+    const newLabel = e.target.value;
+    const updatedFormElements = [...formElements];
+    updatedFormElements[elementIndex].options[optionIndex].label = newLabel;
+    setFormElements(updatedFormElements);
+  };
+
   const handleSave = async () => {
     const formData = {
       formName,
@@ -131,6 +139,28 @@ export default function FormTemplate() {
     }
   };
 
+  const handleAddCheckboxOption = (elementIndex, optionIndex) => {
+    const updatedFormElements = [...formElements];
+    const checkboxElement = updatedFormElements[elementIndex];
+
+    if (checkboxElement && checkboxElement.type === "checkbox") {
+      checkboxElement.options.splice(optionIndex + 1, 0, { label: "" });
+      setFormElements(updatedFormElements);
+    }
+  };
+
+  const handleRemoveCheckboxOption = (elementIndex, optionIndex) => {
+    const updatedFormElements = [...formElements];
+    const checkboxElement = updatedFormElements[elementIndex];
+
+    if (checkboxElement && checkboxElement.type === "checkbox") {
+      if (checkboxElement.options.length > 1) {
+        checkboxElement.options.splice(optionIndex, 1);
+        setFormElements(updatedFormElements);
+      }
+    }
+  };
+
   return (
     <div>
       <div>
@@ -143,10 +173,10 @@ export default function FormTemplate() {
         <h3>Select an element from the dropdown to build the form </h3>
         <select value={selectedElement} onChange={handleElementChange}>
           <option value="">Select an HTML element</option>
-          <option value="dropdown">Dropdown</option>
+          {/* <option value="dropdown">Dropdown</option> */}
           <option value="checkbox">Checkbox</option>
-          <option value="textbox">Text Box</option>
-          <option value="radiobutton">Radio Button</option>
+          <option value="textbox">Text Input</option>
+          {/* <option value="radiobutton">Radio Button</option> */}
         </select>
         <button className={styles.horizontalSpace} onClick={handleAddElement}>
           Add Element To The Form Below
@@ -173,10 +203,16 @@ export default function FormTemplate() {
         )}
         {formElements.map((element, index) => (
           <div key={index} className={styles.formElement}>
-            {element.type === "dropdown" && (
+            {/* {element.type === "dropdown" && (
               <div>
-                <label htmlFor={`dropdownId-${index}`}>Dropdown Label </label>
+                <input
+                  type="text"
+                  value={element.question}
+                  placeholder="Enter your question"
+                  onChange={(e) => handleLabelChange(e, index)}
+                />
                 <select
+                  className={styles.horizontalSpace}
                   id={`dropdownId-${index}`}
                   value={element.selectedValue}
                   onChange={(e) => handleDropdownChange(e, index)}
@@ -186,32 +222,73 @@ export default function FormTemplate() {
                   <option value="option3">Option 3</option>
                 </select>
               </div>
-            )}
+            )} */}
             {element.type === "checkbox" && (
-              <div>
-                <label htmlFor={`checkboxId-${index}`}>Checkbox Label</label>
-                <input
-                  type="checkbox"
-                  id={`checkboxId-${index}`}
-                  name={`checkboxName-${index}`}
-                  checked={element.isChecked}
-                  onChange={(e) => handleCheckboxChange(e, index)}
-                />
+              <div className={styles.formElementContainer}>
+                <div>
+                  <input
+                    type="text"
+                    value={element.question}
+                    placeholder="Enter your question"
+                    onChange={(e) => handleLabelChange(e, index)}
+                  />
+                </div>
+                <label>Add Check Box Options</label>
+                {element.options &&
+                  element.options.map((option, optionIndex) => (
+                    <div key={optionIndex}>
+                      <input
+                        type="text"
+                        value={option.label}
+                        placeholder="Enter your text"
+                        onChange={(e) =>
+                          handleCheckboxLabelChange(e, index, optionIndex)
+                        }
+                      />
+                      <input
+                        type="checkbox"
+                        disabled={true}
+                        id={`checkboxOption-${index}-${optionIndex}`}
+                        name={`checkboxOption-${index}`}
+                      />
+                      <button
+                        onClick={() =>
+                          handleAddCheckboxOption(index, optionIndex)
+                        }
+                      >
+                        +
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleRemoveCheckboxOption(index, optionIndex)
+                        }
+                      >
+                        -
+                      </button>
+                    </div>
+                  ))}
               </div>
             )}
             {element.type === "textbox" && (
               <div>
-                <label htmlFor={`textBoxId-${index}`}>Textbox Label </label>
                 <input
+                  type="text"
+                  value={element.question}
+                  placeholder="Enter your question"
+                  onChange={(e) => handleLabelChange(e, index)}
+                />
+                <label className={styles.horizontalSpace}>Text Input </label>
+
+                {/* <input
                   type="text"
                   id={`textBoxId-${index}`}
                   name={`textBoxName-${index}`}
                   value={element.value}
                   onChange={(e) => handleTextboxChange(e, index)}
-                />
+                /> */}
               </div>
             )}
-            {element.type === "radiobutton" && (
+            {/* {element.type === "radiobutton" && (
               <div>
                 <input
                   type="radio"
@@ -233,7 +310,7 @@ export default function FormTemplate() {
                 />
                 <label htmlFor={`radioId2-${index}`}>Radio 2</label>
               </div>
-            )}
+            )} */}
           </div>
         ))}
       </div>
