@@ -11,5 +11,17 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-FormBuilder Route: For creating forms with custom html elements, so far 4 are supported for testing.
-FormTemplate Route: For creating new form templates out of the recent published form builder, form will be autofilled if there's any form with the same name and same questions (work in progress).
+## Overview
+
+This project is designed to provide two key routes, each serving a specific purpose within your application:
+
+- **FormBuilder Route:** This route empowers users to create custom forms with a variety of HTML elements. Currently, it supports four elements for testing purposes.
+
+- **FormTemplate Route:** This route is focused on creating new form templates based on recently published forms. If a form with the same name and identical questions exists, this feature will autofill the form. Please note that this feature is still a work in progress.
+
+## Key Features
+
+- Create custom forms with HTML elements.
+- Supports various HTML elements for form building.
+- Create new form templates based on recently published forms.
+- Autofill forms with the same name and matching questions (in progress).
