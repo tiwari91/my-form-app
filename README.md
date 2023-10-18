@@ -13,7 +13,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Overview
 
-This project is designed to provide two key routes, each serving a specific purpose within your application:
+This project is designed to provide two key routes:
 
 - **FormBuilder Route:** This route empowers users to create custom forms with a variety of HTML elements. Currently, it supports four elements for testing purposes.
 
