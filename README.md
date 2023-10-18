@@ -3,7 +3,7 @@
 
 ```bash
 npm run install
-npx prisma db push
+npx prisma db push -- (change env setting for localhost)
 npm run dev
 # or
 yarn dev
