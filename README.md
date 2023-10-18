@@ -23,5 +23,5 @@ This project is designed to provide two key routes:
 
 - Create custom forms with HTML elements.
 - Supports various HTML elements for form building.
-- Create new form templates based on recently published forms.
-- Autofill forms with the same name and matching questions (in progress).
+- Create new form templates based on recently published form builder layout.
+- Autofill forms with the same form template name and matching questions (in progress).
