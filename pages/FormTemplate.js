@@ -10,6 +10,7 @@ const formSchema = z.object({
 
 export default function FormTemplate() {
   const [formName, setFormName] = useState("");
+  const [id, setId] = useState("");
   const [formElements, setFormElements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formSaving, setFormSaving] = useState(false);
@@ -22,6 +23,76 @@ export default function FormTemplate() {
       fetchLatestForm();
     }
   }, [loading, formSaving]);
+
+  const fetchLatestForm = async () => {
+    try {
+      const response = await fetch("/api/db/getLatestForm");
+      if (response.ok) {
+        const { form } = await response.json();
+        setFormName(form.formName);
+
+        const mergedFormElements = await checkForAutoFill(
+          form.formName,
+          form.formElements
+        );
+
+        if (mergedFormElements) {
+          setFormElements([...mergedFormElements]);
+          setId(form.id);
+        } else {
+          setFormElements([...form.formElements]);
+        }
+      } else {
+        console.error("Failed to fetch the latest form.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // autofills the form
+  const checkForAutoFill = async (formName, formElements) => {
+    try {
+      const response = await fetch(`/api/db/checkForm?formName=${formName}`);
+      if (response.ok) {
+        const { existingForm } = await response.json();
+
+        const existingFormElements = existingForm?.formElements;
+        const mergedFormElements = mergeFormElements(
+          formElements,
+          existingFormElements
+        );
+
+        return mergedFormElements;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error checking form existence:", error);
+      return null;
+    }
+  };
+
+  const mergeFormElements = (formElements, existingFormElements) => {
+    return formElements.map((formElement) => {
+      const matchingExistingElement = existingFormElements.find(
+        (existingElement) =>
+          existingElement.question === formElement.question &&
+          existingElement.type === formElement.type
+      );
+
+      if (matchingExistingElement) {
+        formElement.options = matchingExistingElement.options;
+        formElement.value = matchingExistingElement.value;
+      }
+
+      if (formElement.type === "dropdown") {
+        formElement.selectedValue = matchingExistingElement.selectedValue;
+      }
+      return formElement;
+    });
+  };
 
   const handleFormNameChange = (e) => {
     setFormName(e.target.value);
@@ -54,95 +125,6 @@ export default function FormTemplate() {
     const updatedFormElements = [...formElements];
     updatedFormElements[index].selectedValue = selectedValue;
     setFormElements(updatedFormElements);
-  };
-
-  const fetchLatestForm = async () => {
-    try {
-      const response = await fetch("/api/db/getLatestForm");
-      if (response.ok) {
-        const { form } = await response.json();
-        setFormName(form.formName);
-        setFormElements([...form.formElements]);
-
-        // const existingForm = await checkForExistingForm(form.formName);
-
-        // if (!existingForm) {
-        //   setFormName(form.formName);
-
-        //   const existingForm = await checkForAutoFill(form.formName);
-        //   if (existingForm) {
-        //     setFormElements([...existingForm.formElements]);
-        //     await saveMergedForm(form.formName, existingForm.formElements);
-        //   } else {
-        //     setFormElements([...form.formElements]);
-        //   }
-        // }
-      } else {
-        console.error("Failed to fetch the latest form.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // to avoid saving duplicate
-  const checkForExistingForm = async (formName) => {
-    try {
-      const response = await fetch(
-        `/api/db/checkForExistingForm?formName=${formName}
-        )}`
-      );
-      if (response.ok) {
-        const { existingForm } = await response.json();
-        return existingForm;
-      }
-      return null;
-    } catch (error) {
-      console.error("Error checking for existing form:", error);
-      return null;
-    }
-  };
-
-  // autofills the form
-  const checkForAutoFill = async (formName) => {
-    try {
-      const response = await fetch(`/api/db/checkForm?formName=${formName}`);
-      if (response.ok) {
-        const { existingForm } = await response.json();
-        return existingForm;
-      }
-      return null;
-    } catch (error) {
-      console.error("Error checking form existence:", error);
-      return null;
-    }
-  };
-
-  const saveMergedForm = async (formName, mergedFormElements) => {
-    try {
-      const formData = {
-        formName,
-        formElements: mergedFormElements,
-      };
-
-      const response = await fetch("/api/db/saveForm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        console.log("Form saved successfully.");
-      } else {
-        console.error("Failed to save the form.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
   };
 
   const handleSave = async (e) => {

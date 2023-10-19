@@ -2,9 +2,13 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
-  const { formName, formElements } = req.body;
+  const { id, formName, formElements } = req.body;
 
   try {
+    if (id) {
+      data.id = id;
+    }
+
     const form = await prisma.FormTemplate.create({
       data: {
         formName,

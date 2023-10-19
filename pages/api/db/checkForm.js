@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   try {
     const { formName } = req.query;
 
-    const existingForm = await prisma.form.findFirst({
+    const existingForm = await prisma.formTemplate.findFirst({
       where: {
         formName: formName,
       },
