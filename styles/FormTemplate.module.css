@@ -1,42 +1,134 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f7f7f7;
+}
+
+.header {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
 .formContainer {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px;
-    border-radius: 5px;
-    width: fit-content;
-}
-
-.formElementContainer {
+  background-color: #fff;
   border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.select {
   padding: 10px;
-  margin: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.addButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
   border-radius: 5px;
-  width: fit-content;
 }
 
-.formElement {
+.label {
+  font-size: 16px;
   margin-top: 20px;
+  display: block;
 }
 
-.saveBtn{
-  margin-top: 20px;
-}
-
-.horizontalSpace {
-  margin-left: 10px; 
+.input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 50%;
+  margin-bottom: 20px;
+  font-size: 16px;
 }
 
 .errorMessage {
-  color: red;
-  font-size: 14px;
-  margin-top: 5px;
+  color: #d9534f;
+  margin-top: 10px;
+  font-size: 16px;
 }
 
-.errorMessage ul {
-  list-style-type: disc;
-  padding-left: 20px;
+.formElement {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 20px;
 }
 
-.errorMessage li {
-  margin: 5px 0;
+.formElementContainer {
+  margin-top: 10px;
+}
+
+.labelInput {
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 50%;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.optionsLabel {
+  font-size: 16px;
+  margin-top: 10px;
+  display: block;
+}
+
+.option {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.optionInput {
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 50%;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.optionButton {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 2px;
+  border-radius: 5px;
+}
+
+
+.saveBtn {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.saveBtn button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.saveBtn button:hover, .optionButton:hover, .addButton:hover  {
+  background-color: #0056b3;
+}
+
+
+.link {
+  display: block;
+  margin: 10px;
+  font-size: 18px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
 }

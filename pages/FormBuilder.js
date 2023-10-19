@@ -176,31 +176,40 @@ export default function FormTemplate() {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <div>
-        <Link href="/">Home</Link>
+        <Link className={styles.link} href="/">
+          Home
+        </Link>
       </div>
 
-      <h2>Form Builder</h2>
+      <h2 className={styles.header}>Form Builder</h2>
 
       <div className={styles.formContainer}>
         <h3>Select an element from the dropdown to build the form </h3>
-        <select value={selectedElement} onChange={handleElementChange}>
+        <select
+          className={styles.select}
+          value={selectedElement}
+          onChange={handleElementChange}
+        >
           <option value="">Select an HTML element</option>
           <option value="dropdown">Dropdown</option>
           <option value="checkbox">Checkbox</option>
           <option value="textbox">Text Input</option>
           <option value="radiobutton">Radio Button</option>
         </select>
-        <button className={styles.horizontalSpace} onClick={handleAddElement}>
+        <button className={styles.addButton} onClick={handleAddElement}>
           Add Element To The Form Below
         </button>
       </div>
 
       <div className={styles.formContainer}>
-        <label htmlFor="formName">Enter the Form Name: </label>
+        <label className={styles.label} htmlFor="formName">
+          Enter the Form Name:{" "}
+        </label>
         <input
           type="text"
+          className={styles.input}
           id="formName"
           placeholder="Enter the Form Name"
           value={formName}
@@ -222,6 +231,7 @@ export default function FormTemplate() {
                 <div>
                   <input
                     type="text"
+                    className={styles.labelInput}
                     value={element.question}
                     placeholder="Enter your question"
                     onChange={(e) => handleLabelChange(e, index)}
@@ -233,6 +243,7 @@ export default function FormTemplate() {
                     <div key={optionIndex}>
                       <input
                         type="text"
+                        className={styles.optionInput}
                         value={option.label}
                         placeholder="Enter your text"
                         onChange={(e) =>
@@ -246,6 +257,7 @@ export default function FormTemplate() {
                         name={`dropdownOption-${index}`}
                       />
                       <button
+                        className={styles.optionButton}
                         onClick={() =>
                           handleAddDropDownOption(index, optionIndex)
                         }
@@ -253,6 +265,7 @@ export default function FormTemplate() {
                         +
                       </button>
                       <button
+                        className={styles.optionButton}
                         onClick={() =>
                           handleRemoveDropDownOption(index, optionIndex)
                         }
@@ -280,6 +293,7 @@ export default function FormTemplate() {
                       <input
                         type="text"
                         value={option.label}
+                        className={styles.optionInput}
                         placeholder="Enter your text"
                         onChange={(e) =>
                           handleCheckboxLabelChange(e, index, optionIndex)
@@ -292,6 +306,7 @@ export default function FormTemplate() {
                         name={`checkboxOption-${index}`}
                       />
                       <button
+                        className={styles.optionButton}
                         onClick={() =>
                           handleAddCheckboxOption(index, optionIndex)
                         }
@@ -299,6 +314,7 @@ export default function FormTemplate() {
                         +
                       </button>
                       <button
+                        className={styles.optionButton}
                         onClick={() =>
                           handleRemoveCheckboxOption(index, optionIndex)
                         }
@@ -312,6 +328,7 @@ export default function FormTemplate() {
             {element.type === "textbox" && (
               <div className={styles.formElementContainer}>
                 <input
+                  className={styles.optionInput}
                   type="text"
                   value={element.question}
                   placeholder="Enter your question"
@@ -324,6 +341,7 @@ export default function FormTemplate() {
               <div className={styles.formElementContainer}>
                 <div>
                   <input
+                    className={styles.optionInput}
                     type="text"
                     value={element.question}
                     placeholder="Enter your question"
@@ -335,6 +353,7 @@ export default function FormTemplate() {
                   element.options.map((option, optionIndex) => (
                     <div key={optionIndex}>
                       <input
+                        className={styles.optionInput}
                         type="text"
                         value={option.label}
                         placeholder="Enter your text"
@@ -349,11 +368,13 @@ export default function FormTemplate() {
                         name={`radioOption-${index}`}
                       />
                       <button
+                        className={styles.optionButton}
                         onClick={() => handleAddRadioOption(index, optionIndex)}
                       >
                         +
                       </button>
                       <button
+                        className={styles.optionButton}
                         onClick={() =>
                           handleRemoveRadioOption(index, optionIndex)
                         }
@@ -369,7 +390,7 @@ export default function FormTemplate() {
       </div>
 
       <div className={styles.saveBtn}>
-        <button onClick={handleSave} type="submit">
+        <button className={styles.saveBtn} onClick={handleSave} type="submit">
           Publish Form
         </button>
       </div>

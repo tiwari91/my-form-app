@@ -164,19 +164,24 @@ export default function FormTemplate() {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <div>
-        <Link href="/">Home</Link>
+        <Link className={styles.link} href="/">
+          Home
+        </Link>
       </div>
 
-      <h2>Form Template:</h2>
+      <h2 className={styles.header}>Form Template:</h2>
 
       <form>
         <div className={styles.formContainer}>
           <div>
-            <label htmlFor="formName">Form Name:</label>
+            <label className={styles.label} htmlFor="formName">
+              Form Name:
+            </label>
             <input
               type="text"
+              className={styles.input}
               placeholder="Enter the Form Name"
               value={formName}
               onChange={handleFormNameChange}
@@ -198,6 +203,7 @@ export default function FormTemplate() {
                   <div>{element.question}</div>
                   <input
                     type="text"
+                    className={styles.labelInput}
                     id={`textBoxId-${index}`}
                     name={`textBoxName-${index}`}
                     value={element.value}
@@ -211,6 +217,7 @@ export default function FormTemplate() {
                   <div>{element.question}</div>
                   <select
                     id={`dropdownId-${index}`}
+                    className={styles.select}
                     value={element.selectedValue}
                     onChange={(e) => handleDropdownChange(e, index)}
                   >
@@ -250,6 +257,7 @@ export default function FormTemplate() {
                     <div key={optionIndex}>
                       <input
                         type="radio"
+                        className={styles.optionInput}
                         id={`radioId1-${index}`}
                         name={`radioGroup-${index}`}
                         checked={option.isChecked}
@@ -267,7 +275,7 @@ export default function FormTemplate() {
         </div>
 
         <div className={styles.saveBtn}>
-          <button onClick={handleSave} type="submit">
+          <button className={styles.saveBtn} onClick={handleSave} type="submit">
             Save Form
           </button>
         </div>
