@@ -72,7 +72,7 @@ export default function FormTemplate() {
       });
 
       if (response.ok) {
-        router.push("/Form");
+        router.push("/");
       } else {
         console.error("Failed to save the form.");
       }

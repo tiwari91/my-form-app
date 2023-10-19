@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   const prisma = new PrismaClient();
 
   try {
-    const newForm = await prisma.Form.create({
+    const newForm = await prisma.form.create({
       data: {
         name,
         email,
