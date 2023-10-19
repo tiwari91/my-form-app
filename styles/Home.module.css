@@ -1,15 +1,14 @@
 .container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f7f7f7;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  justify-content: center;  
+  justify-content: center; 
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f7f7f7;
 }
-
 
 .topLinks {
   display: flex;

@@ -32,7 +32,7 @@ export default function PublishedFormBuilder() {
   };
 
   return (
-    <>
+    <div className={styles.container}>
       <div>
         <h2>Published Form Builders:</h2>
         <select onChange={handleFormChange}>
@@ -101,6 +101,6 @@ export default function PublishedFormBuilder() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -32,7 +32,7 @@ export default function PublishedFormTemplates() {
   };
 
   return (
-    <>
+    <div className={styles.container}>
       <div>
         <h2>Published Forms Templates:</h2>
         <select onChange={handleFormChange}>
@@ -102,6 +102,6 @@ export default function PublishedFormTemplates() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
