@@ -178,7 +178,7 @@ export default function FormTemplate() {
   return (
     <div>
       <div>
-        <Link href="/Form">Home</Link>
+        <Link href="/">Home</Link>
       </div>
 
       <h2>Form Builder</h2>

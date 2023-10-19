@@ -165,7 +165,7 @@ export default function FormTemplate() {
       });
 
       if (response.ok) {
-        router.push("/Form");
+        router.push("/");
         setFormSaving(false);
       } else {
         console.error("Failed to save the form.");
@@ -184,7 +184,7 @@ export default function FormTemplate() {
   return (
     <div>
       <div>
-        <Link href="/Form">Home</Link>
+        <Link href="/">Home</Link>
       </div>
 
       <h2>Form Template:</h2>
