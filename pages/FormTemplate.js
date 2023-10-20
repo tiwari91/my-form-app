@@ -257,7 +257,6 @@ export default function FormTemplate() {
                     <div key={optionIndex}>
                       <input
                         type="radio"
-                        className={styles.optionInput}
                         id={`radioId1-${index}`}
                         name={`radioGroup-${index}`}
                         checked={option.isChecked}
