@@ -22,25 +22,9 @@ export default function FormTemplate() {
     setSelectedElement(e.target.value);
   };
 
-  const handleRemoveElement = (indexToRemove) => {
-    setFormElements((prevElements) =>
-      prevElements.filter((_, index) => index !== indexToRemove)
-    );
-  };
   const handleAddElement = () => {
     if (selectedElement) {
       let newElement = { type: selectedElement, value: "", options: [] };
-
-      // newElement.remove = () => {
-      //   setFormElements((prevElements) => {
-      //     const elementsCopy = [...prevElements];
-      //     const index = elementsCopy.indexOf(newElement);
-      //     if (index !== -1) {
-      //       elementsCopy.splice(index, 1);
-      //     }
-      //     return elementsCopy;
-      //   });
-      // };
 
       if (
         selectedElement === "checkbox" ||
@@ -60,6 +44,12 @@ export default function FormTemplate() {
       setFormElements([...formElements, newElement]);
       setSelectedElement("");
     }
+  };
+
+  const handleRemoveElement = (indexToRemove) => {
+    setFormElements((prevElements) =>
+      prevElements.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const handleFormNameChange = (e) => {
@@ -262,7 +252,7 @@ export default function FormTemplate() {
                     onChange={(e) => handleLabelChange(e, index)}
                   />
                 </div>
-                <label>Add Drop DownOptions</label>
+                <label className={styles.label}>Add Drop DownOptions</label>
                 {element.options &&
                   element.options.map((option, optionIndex) => (
                     <div key={optionIndex}>
@@ -318,7 +308,7 @@ export default function FormTemplate() {
                     onChange={(e) => handleLabelChange(e, index)}
                   />
                 </div>
-                <label>Add Check Box Options</label>
+                <label className={styles.label}>Add Check Box Options</label>
                 {element.options &&
                   element.options.map((option, optionIndex) => (
                     <div key={optionIndex}>
@@ -372,7 +362,7 @@ export default function FormTemplate() {
                   placeholder="Enter your question"
                   onChange={(e) => handleLabelChange(e, index)}
                 />
-                <label className={styles.horizontalSpace}>Text Input </label>
+                <label className={styles.label}>Text Input </label>
               </div>
             )}
             {element.type === "radiobutton" && (
@@ -392,7 +382,7 @@ export default function FormTemplate() {
                     onChange={(e) => handleLabelChange(e, index)}
                   />
                 </div>
-                <label>Add Radio Options</label>
+                <label className={styles.label}>Add Radio Options</label>
                 {element.options &&
                   element.options.map((option, optionIndex) => (
                     <div key={optionIndex}>
