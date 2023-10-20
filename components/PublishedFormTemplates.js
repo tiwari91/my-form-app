@@ -35,7 +35,7 @@ export default function PublishedFormTemplates() {
     <div className={styles.container}>
       <div>
         <h2>Published Forms Templates:</h2>
-        <select onChange={handleFormChange}>
+        <select className={styles.select} onChange={handleFormChange}>
           <option value="">Select Form Templates</option>
           {forms.map((form) => (
             <option key={form.id} value={form.id}>

@@ -35,7 +35,7 @@ export default function PublishedFormBuilder() {
     <div className={styles.container}>
       <div>
         <h2>Published Form Builders:</h2>
-        <select onChange={handleFormChange}>
+        <select className={styles.select} onChange={handleFormChange}>
           <option value="">Select Form Builder</option>
           {forms.map((form) => (
             <option key={form.id} value={form.id}>
