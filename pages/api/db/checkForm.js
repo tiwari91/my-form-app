@@ -14,6 +14,9 @@ export default async function handler(req, res) {
       where: {
         formName: formName,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     if (existingForm) {

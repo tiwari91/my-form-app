@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   try {
     const latestForm = await prisma.Form.findFirst({
-      orderBy: { createdAt: "desc" }, // Order by creation date in descending order
+      orderBy: { createdAt: "desc" },
     });
 
     if (!latestForm) {
