@@ -4,6 +4,9 @@ import styles from "../styles/FormTemplate.module.css";
 import { useRouter } from "next/router";
 import { z } from "zod";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+
 const formSchema = z.object({
   formName: z.string().min(1, "Form name cannot be empty"),
 });
@@ -19,9 +22,25 @@ export default function FormTemplate() {
     setSelectedElement(e.target.value);
   };
 
+  const handleRemoveElement = (indexToRemove) => {
+    setFormElements((prevElements) =>
+      prevElements.filter((_, index) => index !== indexToRemove)
+    );
+  };
   const handleAddElement = () => {
     if (selectedElement) {
       let newElement = { type: selectedElement, value: "", options: [] };
+
+      // newElement.remove = () => {
+      //   setFormElements((prevElements) => {
+      //     const elementsCopy = [...prevElements];
+      //     const index = elementsCopy.indexOf(newElement);
+      //     if (index !== -1) {
+      //       elementsCopy.splice(index, 1);
+      //     }
+      //     return elementsCopy;
+      //   });
+      // };
 
       if (
         selectedElement === "checkbox" ||
@@ -175,8 +194,6 @@ export default function FormTemplate() {
     }
   };
 
-  console.log("formElements", formElements);
-
   return (
     <div className={styles.container}>
       <div>
@@ -230,6 +247,12 @@ export default function FormTemplate() {
           <div key={index} className={styles.formElement}>
             {element.type === "dropdown" && (
               <div className={styles.formElementContainer}>
+                <div className={styles.removeIcon}>
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => handleRemoveElement(index)}
+                  />
+                </div>
                 <div>
                   <input
                     type="text"
@@ -280,6 +303,12 @@ export default function FormTemplate() {
             )}
             {element.type === "checkbox" && (
               <div className={styles.formElementContainer}>
+                <div className={styles.removeIcon}>
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => handleRemoveElement(index)}
+                  />
+                </div>
                 <div>
                   <input
                     type="text"
@@ -330,6 +359,12 @@ export default function FormTemplate() {
             )}
             {element.type === "textbox" && (
               <div className={styles.formElementContainer}>
+                <div className={styles.removeIcon}>
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => handleRemoveElement(index)}
+                  />
+                </div>
                 <input
                   className={styles.optionInput}
                   type="text"
@@ -342,6 +377,12 @@ export default function FormTemplate() {
             )}
             {element.type === "radiobutton" && (
               <div className={styles.formElementContainer}>
+                <div className={styles.removeIcon}>
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => handleRemoveElement(index)}
+                  />
+                </div>
                 <div>
                   <input
                     className={styles.optionInput}

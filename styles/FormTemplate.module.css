@@ -150,3 +150,12 @@
   color: #007bff;
   font-weight: bold;
 }
+
+.removeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  color: red; 
+}
+
