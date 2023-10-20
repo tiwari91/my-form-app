@@ -16,6 +16,8 @@
   border: 1px solid #ccc;
   padding: 20px;
   margin: 20px auto 20px auto;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 }
 
 .select {
@@ -23,6 +25,8 @@
   border: 1px solid #ccc;
   font-size: 16px;
   margin-right: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 }
 
 .addButton {
@@ -38,6 +42,8 @@
   font-size: 16px;
   margin-top: 20px;
   display: block;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 }
 
 .input {
@@ -46,6 +52,8 @@
   width: 50%;
   margin-bottom: 20px;
   font-size: 16px;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 }
 
 .errorMessage {
@@ -58,6 +66,8 @@
   border: 1px solid #ccc;
   padding: 10px;
   margin-top: 20px;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 }
 
 .formElementContainer {
@@ -70,18 +80,24 @@
   width: 50%;
   font-size: 16px;
   margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 }
 
 .optionsLabel {
   font-size: 16px;
   margin-top: 10px;
   display: block;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 }
 
 .option {
   margin-top: 10px;
   display: flex;
   align-items: center;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 }
 
 .optionInput {
@@ -90,6 +106,8 @@
   width: 50%;
   font-size: 16px;
   margin-right: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
 }
 
 .optionButton {

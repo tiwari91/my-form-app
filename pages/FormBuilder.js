@@ -175,6 +175,8 @@ export default function FormTemplate() {
     }
   };
 
+  console.log("formElements", formElements);
+
   return (
     <div className={styles.container}>
       <div>
@@ -282,6 +284,7 @@ export default function FormTemplate() {
                   <input
                     type="text"
                     value={element.question}
+                    className={styles.labelInput}
                     placeholder="Enter your question"
                     onChange={(e) => handleLabelChange(e, index)}
                   />
