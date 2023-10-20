@@ -60,12 +60,14 @@ export default function FormTemplate() {
         const { existingForm } = await response.json();
 
         const existingFormElements = existingForm?.formElements;
-        const mergedFormElements = mergeFormElements(
-          formElements,
-          existingFormElements
-        );
+        if (existingFormElements) {
+          const mergedFormElements = mergeFormElements(
+            formElements,
+            existingFormElements
+          );
 
-        return mergedFormElements;
+          return mergedFormElements;
+        }
       }
       return null;
     } catch (error) {
@@ -170,7 +172,6 @@ export default function FormTemplate() {
           Home
         </Link>
       </div>
-
       <h2 className={styles.header}>Form Template:</h2>
 
       <form>
